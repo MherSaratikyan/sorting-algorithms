@@ -2,33 +2,26 @@
 #include <array>
 
 template <typename T,size_t  size>
-int partition(std::array<T,size>& items,size_t low,size_t high){
-    size_t index{low - 1};
+int partition(std::array<T,size>& items,int low,int high){
+    int index{low - 1};
     T pivot{items[high]};
-    for(size_t j{low};j <= high;++j){
+    for(int j{low};j < high;++j){
         if(items[j] <= pivot){
-            ++index;
-            T hold{items[j]};
-            items[j] = items[index];
-            items[index] = hold;
+            index = index + 1;
+            std::swap(items[index], items[j]);
         }
     }
 
-    return index;
+    std::swap(items[index + 1], items[high]);
+    return index + 1;
 }
 
 template <typename T,size_t size>
-void quick_sort(std::array<T,size>& items,size_t low,size_t high){
-    if(high - low >= 1){
+void quick_sort(std::array<T,size>& items, int low, int high){
+    while(low < high){
         int index = partition(items,low,high);
-
-        if(index > low){
-            quick_sort(items,low,index - 1);
-        }
-
-        if(index < high){
-            quick_sort(items,index + 1,high);
-        }
+        quick_sort(items,low,index - 1);
+        low = index + 1;  
     }
 }
 
